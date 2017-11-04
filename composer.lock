@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "5f63c8ae63642b09cf1feb5c6a514b9b",
+    "content-hash": "eb33b3eb5a732836cead9d117486adec",
     "packages": [
         {
             "name": "evenement/evenement",
@@ -90,6 +90,50 @@
                 "event-loop"
             ],
             "time": "2017-10-14T07:52:39+00:00"
+        },
+        {
+            "name": "wyrihaximus/react-inspector",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/WyriHaximus/reactphp-inspector.git",
+                "reference": "ba38fe563223406fef84d9a4fcb581ef89edec24"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/WyriHaximus/reactphp-inspector/zipball/ba38fe563223406fef84d9a4fcb581ef89edec24",
+                "reference": "ba38fe563223406fef84d9a4fcb581ef89edec24",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.0"
+            },
+            "require-dev": {
+                "api-clients/test-utilities": "^4.2"
+            },
+            "suggest": {
+                "wyrihaximus/react-inspector-event-loop": "Measure what is going through the event loop",
+                "wyrihaximus/react-inspector-f42": "Measure what is going through fread/fwrite methods"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "WyriHaximus\\React\\Inspector\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Cees-Jan Kiewiet",
+                    "email": "ceesjank@gmail.com",
+                    "homepage": "http://wyrihaximus.net/"
+                }
+            ],
+            "description": "Inspect react/* packages for metrics and other insights                               ",
+            "time": "2017-11-04T22:33:22+00:00"
         }
     ],
     "packages-dev": [
@@ -3002,7 +3046,8 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "react/event-loop": 20
+        "react/event-loop": 20,
+        "wyrihaximus/react-inspector": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

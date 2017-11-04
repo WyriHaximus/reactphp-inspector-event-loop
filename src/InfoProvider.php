@@ -164,6 +164,7 @@ class InfoProvider
 
             if ($timer->isPeriodic()) {
                 GlobalState::decr('timers.periodic.current');
+
                 return;
             }
 

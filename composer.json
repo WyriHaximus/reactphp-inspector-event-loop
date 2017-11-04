@@ -1,6 +1,6 @@
 {
-  "name": "wyrihaximus/react-event-loop-inspector",
-  "description": "Inspect react/* packages for metrics and other insights                               ",
+  "name": "wyrihaximus/react-inspector-event-loop",
+  "description": "Inspect react/event-loop package for metrics and other insights                               ",
   "license": "MIT",
   "authors": [
     {
@@ -11,8 +11,9 @@
   ],
   "require": {
     "php": "^7.0",
+    "evenement/evenement": "^3.0 || ^2.0",
     "react/event-loop": "dev-master as v0.4.3",
-    "evenement/evenement": "^3.0 || ^2.0"
+    "wyrihaximus/react-inspector": "dev-master"
   },
   "require-dev": {
     "api-clients/test-utilities": "^4.2"
@@ -26,9 +27,6 @@
     "psr-4": {
       "WyriHaximus\\React\\Tests\\Inspector\\": "src/"
     }
-  },
-  "suggest": {
-    "wyrihaximus/react-event-loop-inspector-f42": "Measure what is going through fread/fwrite methods"
   },
   "config": {
     "sort-packages": true,
