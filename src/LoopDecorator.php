@@ -1,20 +1,25 @@
 <?php declare(strict_types=1);
 
-namespace WyriHaximus\React\Inspector;
+namespace WyriHaximus\React\Inspector\EventLoop;
 
 use Evenement\EventEmitterInterface;
 use Evenement\EventEmitterTrait;
 use React\EventLoop\LoopInterface;
-use React\EventLoop\Timer\TimerInterface;
+use React\EventLoop\TimerInterface;
 
-class LoopDecorator implements LoopInterface, EventEmitterInterface
+final class LoopDecorator implements LoopInterface, EventEmitterInterface
 {
     use EventEmitterTrait;
 
     /**
      * @var LoopInterface
      */
-    protected $loop;
+    private $loop;
+
+    /**
+     * @var callable[][]
+     */
+    private $signals = [];
 
     /**
      * @param LoopInterface $loop
@@ -30,7 +35,7 @@ class LoopDecorator implements LoopInterface, EventEmitterInterface
      * @param stream   $stream   The PHP stream resource to check.
      * @param callable $listener Invoked when the stream is ready.
      */
-    public function addReadStream($stream, callable $listener)
+    public function addReadStream($stream, $listener)
     {
         $this->emit('addReadStream', [$stream, $listener]);
         $this->loop->addReadStream($stream, function ($stream) use ($listener) {
@@ -45,7 +50,7 @@ class LoopDecorator implements LoopInterface, EventEmitterInterface
      * @param stream   $stream   The PHP stream resource to check.
      * @param callable $listener Invoked when the stream is ready.
      */
-    public function addWriteStream($stream, callable $listener)
+    public function addWriteStream($stream, $listener)
     {
         $this->emit('addWriteStream', [$stream, $listener]);
         $this->loop->addWriteStream($stream, function ($stream) use ($listener) {
@@ -76,15 +81,39 @@ class LoopDecorator implements LoopInterface, EventEmitterInterface
         $this->loop->removeWriteStream($stream);
     }
 
-    /**
-     * Remove all listeners for the given stream.
-     *
-     * @param stream $stream The PHP stream resource.
-     */
-    public function removeStream($stream)
+    public function addSignal($signal, $listener)
     {
-        $this->emit('removeStream', [$stream]);
-        $this->loop->removeStream($stream);
+        $hash = $listener;
+        if (!is_string($listener)) {
+            $hash = spl_object_hash($listener);
+        }
+
+        if (!isset($this->signals[$signal])) {
+            $this->signals[$signal] = [];
+        }
+
+        $this->signals[$signal][$hash] = function (...$args) use ($signal, $listener, $hash) {
+            $this->emit('signalTick', [$signal, $this->signals[$signal][$hash]]);
+            $listener(...$args);
+        };
+        $this->emit('addSignal', [$signal, $this->signals[$signal][$hash]]);
+        $this->loop->addSignal($signal, $this->signals[$signal][$hash]);
+    }
+
+    public function removeSignal($signal, $listener)
+    {
+        $hash = $listener;
+        if (!is_string($listener)) {
+            $hash = spl_object_hash($listener);
+        }
+
+        $this->emit('removeSignal', [$signal, $this->signals[$signal][$hash]]);
+        $this->loop->removeSignal($signal, $this->signals[$signal][$hash]);
+
+        unset($this->signals[$signal][$hash]);
+        if (count($this->signals[$signal]) === 0) {
+            unset($this->signals[$signal]);
+        }
     }
 
     /**
@@ -98,7 +127,7 @@ class LoopDecorator implements LoopInterface, EventEmitterInterface
      *
      * @return TimerInterface
      */
-    public function addTimer($interval, callable $callback)
+    public function addTimer($interval, $callback)
     {
         $loopTimer = null;
         $wrapper = function () use (&$loopTimer, $callback, $interval) {
@@ -125,7 +154,7 @@ class LoopDecorator implements LoopInterface, EventEmitterInterface
      *
      * @return TimerInterface
      */
-    public function addPeriodicTimer($interval, callable $callback)
+    public function addPeriodicTimer($interval, $callback)
     {
         $loopTimer = $this->loop->addPeriodicTimer(
             $interval,
@@ -170,7 +199,7 @@ class LoopDecorator implements LoopInterface, EventEmitterInterface
      *
      * @param callable $listener The callback to invoke.
      */
-    public function futureTick(callable $listener)
+    public function futureTick($listener)
     {
         $this->emit('futureTick', [$listener]);
 
@@ -178,16 +207,6 @@ class LoopDecorator implements LoopInterface, EventEmitterInterface
             $this->emit('futureTickTick', [$listener]);
             $listener($this);
         });
-    }
-
-    /**
-     * Perform a single iteration of the event loop.
-     */
-    public function tick()
-    {
-        $this->emit('tickStart');
-        $this->loop->tick();
-        $this->emit('tickDone');
     }
 
     /**

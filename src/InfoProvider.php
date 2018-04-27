@@ -1,8 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace WyriHaximus\React\Inspector;
+namespace WyriHaximus\React\Inspector\EventLoop;
 
-use React\EventLoop\Timer\TimerInterface;
+use React\EventLoop\TimerInterface;
+use WyriHaximus\React\Inspector\GlobalState;
 
 class InfoProvider
 {
@@ -37,6 +38,11 @@ class InfoProvider
     private $timers = [];
 
     /**
+     * @var int[]
+     */
+    private $signals = [];
+
+    /**
      * @param LoopDecorator $loop
      */
     public function __construct(LoopDecorator $loop)
@@ -47,6 +53,7 @@ class InfoProvider
         $this->setupTicks($loop);
         $this->setupTimers($loop);
         $this->setupStreams($loop);
+        $this->setupSignals($loop);
     }
 
     public function reset()
@@ -86,6 +93,13 @@ class InfoProvider
         GlobalState::set('ticks.future.current', 0);
         GlobalState::set('ticks.future.total', 0);
         GlobalState::set('ticks.future.ticks', 0);
+
+        /**
+         * Signals.
+         */
+        GlobalState::set('signals.current', 0);
+        GlobalState::set('signals.total', 0);
+        GlobalState::set('signals.ticks', 0);
     }
 
     public function resetTotals()
@@ -96,6 +110,7 @@ class InfoProvider
         GlobalState::set('timers.once.total', 0);
         GlobalState::set('timers.periodic.total', 0);
         GlobalState::set('ticks.future.total', 0);
+        GlobalState::set('signals.total', 0);
     }
 
     public function resetTicks()
@@ -106,6 +121,7 @@ class InfoProvider
         GlobalState::set('timers.once.ticks', 0);
         GlobalState::set('timers.periodic.ticks', 0);
         GlobalState::set('ticks.future.ticks', 0);
+        GlobalState::set('signals.ticks', 0);
     }
 
     /**
@@ -236,23 +252,34 @@ class InfoProvider
             GlobalState::set('streams.write.current', count($this->streamsWrite));
             GlobalState::set('streams.total.current', count($this->streamsDuplex));
         });
+    }
 
-        $loop->on('removeStream', function ($stream) {
-            $key = (int) $stream;
-
-            if (isset($this->streamsRead[$key])) {
-                unset($this->streamsRead[$key]);
-            }
-            if (isset($this->streamsWrite[$key])) {
-                unset($this->streamsWrite[$key]);
-            }
-            if (isset($this->streamsDuplex[$key])) {
-                unset($this->streamsDuplex[$key]);
+    protected function setupSignals(LoopDecorator $loop)
+    {
+        $loop->on('signalTick', function () {
+            GlobalState::incr('signals.ticks');
+        });
+        $loop->on('addSignal', function ($signal, $listener) {
+            if (!isset($this->signals[$signal])) {
+                $this->signals[$signal] = [];
             }
 
-            GlobalState::set('streams.read.current', count($this->streamsRead));
-            GlobalState::set('streams.write.current', count($this->streamsWrite));
-            GlobalState::set('streams.total.current', count($this->streamsDuplex));
+            $hash = spl_object_hash($listener);
+
+            $this->signals[$signal][$hash] = $listener;
+
+            GlobalState::set('signals.current', count($this->signals));
+            GlobalState::incr('signals.total');
+        });
+        $loop->on('removeSignal', function ($signal, $listener) {
+            $hash = spl_object_hash($listener);
+
+            unset($this->signals[$signal][$hash]);
+            if (count($this->signals[$signal]) === 0) {
+                unset($this->signals[$signal]);
+            }
+
+            GlobalState::set('signals.current', count($this->signals));
         });
     }
 }

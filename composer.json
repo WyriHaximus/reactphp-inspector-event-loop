@@ -20,12 +20,12 @@
   },
   "autoload": {
     "psr-4": {
-      "WyriHaximus\\React\\Inspector\\": "src/"
+      "WyriHaximus\\React\\Inspector\\EventLoop\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "WyriHaximus\\React\\Tests\\Inspector\\": "src/"
+      "WyriHaximus\\React\\Tests\\Inspector\\EventLoop\\": "src/"
     }
   },
   "config": {

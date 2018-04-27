@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace WyriHaximus\React\Tests\Inspector;
+namespace WyriHaximus\React\Tests\Inspector\EventLoop;
 
 use PHPUnit\Framework\TestCase;
 use React\EventLoop\LoopInterface;
 use React\EventLoop\StreamSelectLoop;
-use React\EventLoop\Timer\TimerInterface;
-use WyriHaximus\React\Inspector\InfoProvider;
-use WyriHaximus\React\Inspector\LoopDecorator;
+use React\EventLoop\TimerInterface;
+use WyriHaximus\React\Inspector\EventLoop\InfoProvider;
+use WyriHaximus\React\Inspector\EventLoop\LoopDecorator;
 
 class InfoProviderTest extends TestCase
 {
@@ -320,6 +320,34 @@ class InfoProviderTest extends TestCase
         $this->assertSame(2, $counters['streams.read.total']);
         $this->assertSame(2, $counters['streams.write.total']);
         $this->assertSame(3, $counters['streams.total.total']);
+
+        $signalFunc = function () {
+        };
+        $this->loop->addSignal(SIGUSR1, $signalFunc);
+
+        $counters = $this->infoProvider->getCounters();
+        $this->assertSame(0, $counters['streams.read.current']);
+        $this->assertSame(0, $counters['streams.write.current']);
+        $this->assertSame(0, $counters['streams.total.current']);
+        $this->assertSame(2, $counters['streams.read.total']);
+        $this->assertSame(2, $counters['streams.write.total']);
+        $this->assertSame(3, $counters['streams.total.total']);
+        $this->assertSame(1, $counters['signals.current']);
+        $this->assertSame(1, $counters['signals.total']);
+        $this->assertSame(0, $counters['signals.ticks']);
+
+        $this->loop->removeSignal(SIGUSR1, $signalFunc);
+
+        $counters = $this->infoProvider->getCounters();
+        $this->assertSame(0, $counters['streams.read.current']);
+        $this->assertSame(0, $counters['streams.write.current']);
+        $this->assertSame(0, $counters['streams.total.current']);
+        $this->assertSame(2, $counters['streams.read.total']);
+        $this->assertSame(2, $counters['streams.write.total']);
+        $this->assertSame(3, $counters['streams.total.total']);
+        $this->assertSame(0, $counters['signals.current']);
+        $this->assertSame(1, $counters['signals.total']);
+        $this->assertSame(0, $counters['signals.ticks']);
     }
 
     protected function createStream($mode)

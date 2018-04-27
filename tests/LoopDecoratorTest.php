@@ -1,13 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace WyriHaximus\React\Tests\Inspector;
+namespace WyriHaximus\React\Tests\Inspector\EventLoop;
 
 use Phake;
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use React\EventLoop\Factory;
 use React\EventLoop\LoopInterface;
-use React\EventLoop\Timer\TimerInterface;
-use WyriHaximus\React\Inspector\LoopDecorator;
+use React\EventLoop\TimerInterface;
+use WyriHaximus\React\Inspector\EventLoop\LoopDecorator;
 
 class LoopDecoratorTest extends TestCase
 {
@@ -129,15 +130,33 @@ class LoopDecoratorTest extends TestCase
         Phake::verify($loop)->removeWriteStream($stream);
     }
 
-    public function testRemoveStream()
+    public function provideSignalCallables()
     {
-        $loop = Phake::mock(LoopInterface::class);
-        $decoratedLoop = new LoopDecorator($loop);
+        yield [function () {
+        }];
+        yield ['spl_object_hash'];
+        yield [new class() {
+            public function __invoke()
+            {
+            }
+        }];
+    }
 
-        $stream = 'abc';
-        $decoratedLoop->removeStream($stream);
+    /**
+     * @dataProvider provideSignalCallables
+     * @param mixed $func
+     */
+    public function testSignals($func)
+    {
+        $loop = $this->prophesize(LoopInterface::class);
+        $loop->addSignal(SIGUSR1, Argument::type('callable'))->shouldBeCalled();
 
-        Phake::verify($loop)->removeStream($stream);
+        $loop->removeSignal(SIGUSR1, Argument::type('callable'))->shouldBeCalled();
+
+        $decoratedLoop = new LoopDecorator($loop->reveal());
+
+        $decoratedLoop->addSignal(SIGUSR1, $func);
+        $decoratedLoop->removeSignal(SIGUSR1, $func);
     }
 
     public function testAddTimer()
@@ -234,17 +253,6 @@ class LoopDecoratorTest extends TestCase
 
         $this->assertTrue($called);
         Phake::verify($loop)->cancelTimer($timer);
-    }
-
-    public function testIsTimerActive()
-    {
-        $loop = Phake::mock(LoopInterface::class);
-        $decoratedLoop = new LoopDecorator($loop);
-
-        $timer = Phake::mock(TimerInterface::class);
-        $decoratedLoop->isTimerActive($timer);
-
-        Phake::verify($loop)->isTimerActive($timer);
     }
 
     public function testFutureTick()
