@@ -100,6 +100,12 @@ class InfoProvider
         GlobalState::set('signals.current', 0);
         GlobalState::set('signals.total', 0);
         GlobalState::set('signals.ticks', 0);
+
+        /**
+         * IO
+         */
+        GlobalState::set('io.read', 0);
+        GlobalState::set('io.write', 0);
     }
 
     public function resetTotals()
@@ -122,6 +128,12 @@ class InfoProvider
         GlobalState::set('timers.periodic.ticks', 0);
         GlobalState::set('ticks.future.ticks', 0);
         GlobalState::set('signals.ticks', 0);
+    }
+
+    public function resetIo()
+    {
+        GlobalState::set('io.read', 0);
+        GlobalState::set('io.write', 0);
     }
 
     /**
