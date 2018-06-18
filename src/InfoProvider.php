@@ -48,7 +48,6 @@ class InfoProvider
     public function __construct(LoopDecorator $loop)
     {
         $this->loop = $loop;
-        $this->reset();
 
         $this->setupTicks($loop);
         $this->setupTimers($loop);
