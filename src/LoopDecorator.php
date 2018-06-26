@@ -2,22 +2,44 @@
 
 namespace WyriHaximus\React\Inspector\EventLoop;
 
-use Evenement\EventEmitterInterface;
-use Evenement\EventEmitterTrait;
 use React\EventLoop\LoopInterface;
 use React\EventLoop\TimerInterface;
+use WyriHaximus\React\Inspector\GlobalState;
 
-final class LoopDecorator implements LoopInterface, EventEmitterInterface
+final class LoopDecorator implements LoopInterface
 {
-    use EventEmitterTrait;
-
     /**
      * @var LoopInterface
      */
     private $loop;
 
     /**
-     * @var callable[][]
+     * @var array
+     */
+    private $counters = [];
+
+    /**
+     * @var array
+     */
+    private $streamsRead = [];
+
+    /**
+     * @var array
+     */
+    private $streamsWrite = [];
+
+    /**
+     * @var array
+     */
+    private $streamsDuplex = [];
+
+    /**
+     * @var TimerInterface[]
+     */
+    private $timers = [];
+
+    /**
+     * @var int[]
      */
     private $signals = [];
 
@@ -37,9 +59,22 @@ final class LoopDecorator implements LoopInterface, EventEmitterInterface
      */
     public function addReadStream($stream, $listener)
     {
-        $this->emit('addReadStream', [$stream, $listener]);
+        $key = (int) $stream;
+
+        $this->streamsRead[$key] = $stream;
+        $this->streamsDuplex[$key] = $stream;
+
+        GlobalState::set('streams.read.current', count($this->streamsRead));
+        GlobalState::set('streams.total.current', count($this->streamsDuplex));
+        GlobalState::incr('streams.read.total');
+        if (!isset($this->streamsWrite[$key])) {
+            GlobalState::incr('streams.total.total');
+        }
+
         $this->loop->addReadStream($stream, function ($stream) use ($listener) {
-            $this->emit('readStreamTick', [$stream, $listener]);
+            GlobalState::incr('streams.read.ticks');
+            GlobalState::incr('streams.total.ticks');
+
             $listener($stream, $this);
         });
     }
@@ -52,9 +87,23 @@ final class LoopDecorator implements LoopInterface, EventEmitterInterface
      */
     public function addWriteStream($stream, $listener)
     {
-        $this->emit('addWriteStream', [$stream, $listener]);
+        $key = (int) $stream;
+
+        $this->streamsWrite[$key] = $stream;
+        $this->streamsDuplex[$key] = $stream;
+
+        GlobalState::set('streams.write.current', count($this->streamsWrite));
+        GlobalState::set('streams.total.current', count($this->streamsDuplex));
+        GlobalState::incr('streams.write.total');
+
+        if (!isset($this->streamsRead[$key])) {
+            GlobalState::incr('streams.total.total');
+        }
+
         $this->loop->addWriteStream($stream, function ($stream) use ($listener) {
-            $this->emit('writeStreamTick', [$stream, $listener]);
+            GlobalState::incr('streams.write.ticks');
+            GlobalState::incr('streams.total.ticks');
+
             $listener($stream, $this);
         });
     }
@@ -66,7 +115,18 @@ final class LoopDecorator implements LoopInterface, EventEmitterInterface
      */
     public function removeReadStream($stream)
     {
-        $this->emit('removeReadStream', [$stream]);
+        $key = (int) $stream;
+
+        if (isset($this->streamsRead[$key])) {
+            unset($this->streamsRead[$key]);
+        }
+        if (isset($this->streamsDuplex[$key]) && !isset($this->streamsWrite[$key])) {
+            unset($this->streamsDuplex[$key]);
+        }
+
+        GlobalState::set('streams.read.current', count($this->streamsRead));
+        GlobalState::set('streams.total.current', count($this->streamsDuplex));
+
         $this->loop->removeReadStream($stream);
     }
 
@@ -77,7 +137,18 @@ final class LoopDecorator implements LoopInterface, EventEmitterInterface
      */
     public function removeWriteStream($stream)
     {
-        $this->emit('removeWriteStream', [$stream]);
+        $key = (int) $stream;
+
+        if (isset($this->streamsWrite[$key])) {
+            unset($this->streamsWrite[$key]);
+        }
+        if (isset($this->streamsDuplex[$key]) && !isset($this->streamsRead[$key])) {
+            unset($this->streamsDuplex[$key]);
+        }
+
+        GlobalState::set('streams.write.current', count($this->streamsWrite));
+        GlobalState::set('streams.total.current', count($this->streamsDuplex));
+
         $this->loop->removeWriteStream($stream);
     }
 
@@ -93,10 +164,14 @@ final class LoopDecorator implements LoopInterface, EventEmitterInterface
         }
 
         $this->signals[$signal][$hash] = function (...$args) use ($signal, $listener, $hash) {
-            $this->emit('signalTick', [$signal, $this->signals[$signal][$hash]]);
+            GlobalState::incr('signals.ticks');
+
             $listener(...$args);
         };
-        $this->emit('addSignal', [$signal, $this->signals[$signal][$hash]]);
+
+        GlobalState::set('signals.current', count($this->signals));
+        GlobalState::incr('signals.total');
+
         $this->loop->addSignal($signal, $this->signals[$signal][$hash]);
     }
 
@@ -107,13 +182,14 @@ final class LoopDecorator implements LoopInterface, EventEmitterInterface
             $hash = spl_object_hash($listener);
         }
 
-        $this->emit('removeSignal', [$signal, $this->signals[$signal][$hash]]);
         $this->loop->removeSignal($signal, $this->signals[$signal][$hash]);
 
         unset($this->signals[$signal][$hash]);
         if (count($this->signals[$signal]) === 0) {
             unset($this->signals[$signal]);
         }
+
+        GlobalState::set('signals.current', count($this->signals));
     }
 
     /**
@@ -131,14 +207,22 @@ final class LoopDecorator implements LoopInterface, EventEmitterInterface
     {
         $loopTimer = null;
         $wrapper = function () use (&$loopTimer, $callback, $interval) {
-            $this->emit('timerTick', [$interval, $callback, $loopTimer]);
+            GlobalState::decr('timers.once.current');
+            GlobalState::incr('timers.once.ticks');
+
             $callback($loopTimer);
+
+            unset($this->timers[spl_object_hash($loopTimer)]);
         };
         $loopTimer = $this->loop->addTimer(
             $interval,
             $wrapper
         );
-        $this->emit('addTimer', [$interval, $callback, $loopTimer]);
+
+        $this->timers[spl_object_hash($loopTimer)] = true;
+
+        GlobalState::incr('timers.once.current');
+        GlobalState::incr('timers.once.total');
 
         return $loopTimer;
     }
@@ -159,11 +243,16 @@ final class LoopDecorator implements LoopInterface, EventEmitterInterface
         $loopTimer = $this->loop->addPeriodicTimer(
             $interval,
             function () use (&$loopTimer, $callback, $interval) {
-                $this->emit('periodicTimerTick', [$interval, $callback, $loopTimer]);
+                GlobalState::incr('timers.periodic.ticks');
+
                 $callback($loopTimer);
             }
         );
-        $this->emit('addPeriodicTimer', [$interval, $callback, $loopTimer]);
+
+        $this->timers[spl_object_hash($loopTimer)] = true;
+
+        GlobalState::incr('timers.periodic.current');
+        GlobalState::incr('timers.periodic.total');
 
         return $loopTimer;
     }
@@ -175,21 +264,22 @@ final class LoopDecorator implements LoopInterface, EventEmitterInterface
      */
     public function cancelTimer(TimerInterface $timer)
     {
-        $this->emit('cancelTimer', [$timer]);
+        $isPeriodic = $timer->isPeriodic();
+        $hash = spl_object_hash($timer);
+        $this->loop->cancelTimer($timer);
+        if (!isset($this->timers[$hash])) {
+            return;
+        }
 
-        return $this->loop->cancelTimer($timer);
-    }
+        unset($this->timers[$hash]);
 
-    /**
-     * Check if a given timer is active.
-     *
-     * @param TimerInterface $timer The timer to check.
-     *
-     * @return bool True if the timer is still enqueued for execution.
-     */
-    public function isTimerActive(TimerInterface $timer)
-    {
-        return $this->loop->isTimerActive($timer);
+        if ($isPeriodic) {
+            GlobalState::decr('timers.periodic.current');
+
+            return;
+        }
+
+        GlobalState::decr('timers.once.current');
     }
 
     /**
@@ -201,10 +291,12 @@ final class LoopDecorator implements LoopInterface, EventEmitterInterface
      */
     public function futureTick($listener)
     {
-        $this->emit('futureTick', [$listener]);
+        GlobalState::incr('ticks.future.current');
+        GlobalState::incr('ticks.future.total');
 
         return $this->loop->futureTick(function () use ($listener) {
-            $this->emit('futureTickTick', [$listener]);
+            GlobalState::decr('ticks.future.current');
+            GlobalState::incr('ticks.future.ticks');
             $listener($this);
         });
     }
@@ -214,9 +306,7 @@ final class LoopDecorator implements LoopInterface, EventEmitterInterface
      */
     public function run()
     {
-        $this->emit('runStart');
         $this->loop->run();
-        $this->emit('runDone');
     }
 
     /**
@@ -224,8 +314,6 @@ final class LoopDecorator implements LoopInterface, EventEmitterInterface
      */
     public function stop()
     {
-        $this->emit('stopStart');
         $this->loop->stop();
-        $this->emit('stopDone');
     }
 }

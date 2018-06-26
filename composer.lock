@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ae222e115cdd733d041f27762d87fd69",
+    "content-hash": "5192fda599f74f218ed0b22604df0298",
     "packages": [
         {
             "name": "evenement/evenement",
@@ -50,6 +50,100 @@
             "time": "2017-07-23T21:35:13+00:00"
         },
         {
+            "name": "igorw/get-in",
+            "version": "v1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/igorw/get-in.git",
+                "reference": "170ded831f49abc6a6061f655aba9bdbcf7b8111"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/igorw/get-in/zipball/170ded831f49abc6a6061f655aba9bdbcf7b8111",
+                "reference": "170ded831f49abc6a6061f655aba9bdbcf7b8111",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/get_in.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Igor Wiedler",
+                    "email": "igor@wiedler.ch"
+                }
+            ],
+            "description": "Functions for for hash map (assoc array) traversal.",
+            "keywords": [
+                "assoc-array",
+                "hash-map"
+            ],
+            "time": "2014-12-15T23:03:51+00:00"
+        },
+        {
+            "name": "joshdifabio/composed",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/joshdifabio/composed.git",
+                "reference": "ba6019e070679a4bf371bbf92a2093bc73c99d07"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/joshdifabio/composed/zipball/ba6019e070679a4bf371bbf92a2093bc73c99d07",
+                "reference": "ba6019e070679a4bf371bbf92a2093bc73c99d07",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Composed\\": "src"
+                },
+                "files": [
+                    "src/functions_include.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Josh Di Fabio",
+                    "email": "joshdifabio@gmail.com"
+                }
+            ],
+            "description": "Easily parse your project's Composer configuration, and those of its dependencies, at runtime.",
+            "keywords": [
+                "composer",
+                "dependency",
+                "package"
+            ],
+            "time": "2015-07-16T22:30:20+00:00"
+        },
+        {
             "name": "react/event-loop",
             "version": "v0.5.2",
             "source": {
@@ -91,35 +185,207 @@
             "time": "2018-04-24T11:23:06+00:00"
         },
         {
+            "name": "react/promise",
+            "version": "v2.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/reactphp/promise.git",
+                "reference": "f4edc2581617431aea50430749db55cc3fc031b3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/reactphp/promise/zipball/f4edc2581617431aea50430749db55cc3fc031b3",
+                "reference": "f4edc2581617431aea50430749db55cc3fc031b3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "React\\Promise\\": "src/"
+                },
+                "files": [
+                    "src/functions_include.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jan Sorgalla",
+                    "email": "jsorgalla@gmail.com"
+                }
+            ],
+            "description": "A lightweight implementation of CommonJS Promises/A for PHP",
+            "keywords": [
+                "promise",
+                "promises"
+            ],
+            "time": "2018-06-13T15:59:06+00:00"
+        },
+        {
+            "name": "reactivex/rxphp",
+            "version": "2.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ReactiveX/RxPHP.git",
+                "reference": "fd74a0cd2b5edd4a48e4ff12aaa44cc6cdc4a9b4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ReactiveX/RxPHP/zipball/fd74a0cd2b5edd4a48e4ff12aaa44cc6cdc4a9b4",
+                "reference": "fd74a0cd2b5edd4a48e4ff12aaa44cc6cdc4a9b4",
+                "shasum": ""
+            },
+            "require": {
+                "php": "~7.0",
+                "react/promise": "~2.2"
+            },
+            "require-dev": {
+                "phpunit/phpcov": "^3.1",
+                "phpunit/phpunit": "^5.7",
+                "react/event-loop": "^1.0 || ^0.5 || ^0.4.2",
+                "satooshi/php-coveralls": "~1.0"
+            },
+            "suggest": {
+                "react/event-loop": "Used for scheduling async operations"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Rx\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alexander",
+                    "email": "iam.asm89@gmail.com"
+                },
+                {
+                    "name": "David Dan",
+                    "email": "davidwdan@gmail.com"
+                },
+                {
+                    "name": "Matt Bonneau",
+                    "email": "matt@bonneau.net"
+                }
+            ],
+            "description": "Reactive extensions for php.",
+            "homepage": "https://github.com/ReactiveX/RxPHP",
+            "keywords": [
+                "extensions",
+                "reactive",
+                "rx"
+            ],
+            "time": "2018-04-18T01:34:36+00:00"
+        },
+        {
+            "name": "wyrihaximus/get-in-packages-composer.jason",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/WyriHaximus/php-get-in-packages-composer.json.git",
+                "reference": "5d42230dcacd8f30c2d5cb3dc9ed0fafb79aaaa8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/WyriHaximus/php-get-in-packages-composer.json/zipball/5d42230dcacd8f30c2d5cb3dc9ed0fafb79aaaa8",
+                "reference": "5d42230dcacd8f30c2d5cb3dc9ed0fafb79aaaa8",
+                "shasum": ""
+            },
+            "require": {
+                "igorw/get-in": "^1.0",
+                "joshdifabio/composed": "^1.0",
+                "php": "^7.2"
+            },
+            "require-dev": {
+                "api-clients/test-utilities": "^5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/functions_include.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Cees-Jan Kiewiet",
+                    "email": "ceesjank@gmail.com",
+                    "homepage": "http://wyrihaximus.net/"
+                }
+            ],
+            "description": "Functions around joshdifabio/composed and igorw/get-in to gather configuration from composer.json",
+            "time": "2018-06-19T20:43:13+00:00"
+        },
+        {
             "name": "wyrihaximus/react-inspector",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/WyriHaximus/reactphp-inspector.git",
-                "reference": "cc8185d82cefc54aa762406eb5dfa35ac295935f"
+                "reference": "33600a9d8aa2a2d217300ad8ca3fe881da9e52d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WyriHaximus/reactphp-inspector/zipball/cc8185d82cefc54aa762406eb5dfa35ac295935f",
-                "reference": "cc8185d82cefc54aa762406eb5dfa35ac295935f",
+                "url": "https://api.github.com/repos/WyriHaximus/reactphp-inspector/zipball/33600a9d8aa2a2d217300ad8ca3fe881da9e52d7",
+                "reference": "33600a9d8aa2a2d217300ad8ca3fe881da9e52d7",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.0"
+                "php": "^7.2",
+                "reactivex/rxphp": "^2.0",
+                "wyrihaximus/get-in-packages-composer.jason": "^1.0",
+                "wyrihaximus/ticking-promise": "^1.6"
             },
             "require-dev": {
-                "api-clients/test-utilities": "^4.2"
+                "api-clients/test-utilities": "^5.0"
             },
             "suggest": {
                 "wyrihaximus/react-inspector-bunny": "Measure what is going through fread/fwrite calls from bunny/bunny",
+                "wyrihaximus/react-inspector-cpu-usage": "Measure the CPU usage of your application and it's child processes",
                 "wyrihaximus/react-inspector-event-loop": "Measure what is going through the event loop",
                 "wyrihaximus/react-inspector-stream": "Measure what is going through fread/fwrite calls from react/stream"
             },
             "type": "library",
+            "extra": {
+                "react-inspector": {
+                    "metrics": [
+                        "inspector.metrics"
+                    ],
+                    "reset": {
+                        "ticks": [
+                            "inspector.metrics"
+                        ]
+                    }
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "WyriHaximus\\React\\Inspector\\": "src/"
-                }
+                },
+                "files": [
+                    "src/bootstrap_include.php"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -133,7 +399,54 @@
                 }
             ],
             "description": "Inspect react/* packages for metrics and other insights                               ",
-            "time": "2018-04-27T22:08:55+00:00"
+            "time": "2018-06-23T18:43:55+00:00"
+        },
+        {
+            "name": "wyrihaximus/ticking-promise",
+            "version": "1.6.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/WyriHaximus/TickingPromise.git",
+                "reference": "4bb99024402bb7526de8880f3dab0c1f0858def5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/WyriHaximus/TickingPromise/zipball/4bb99024402bb7526de8880f3dab0c1f0858def5",
+                "reference": "4bb99024402bb7526de8880f3dab0c1f0858def5",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.0 || ^5.4",
+                "react/event-loop": "^1.0 || ^0.5 || ^0.4",
+                "react/promise": "~2.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.4",
+                "squizlabs/php_codesniffer": "^1.5.6",
+                "vectorface/dunit": "~1.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "WyriHaximus\\React\\": "src/"
+                },
+                "files": [
+                    "src/functions_include.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Cees-Jan Kiewiet",
+                    "email": "ceesjank@gmail.com",
+                    "homepage": "http://wyrihaximus.net/"
+                }
+            ],
+            "description": "Wrapping ticks into a promise",
+            "time": "2018-04-05T12:36:50+00:00"
         }
     ],
     "packages-dev": [
@@ -2311,52 +2624,6 @@
             "time": "2016-10-10T12:19:37+00:00"
         },
         {
-            "name": "react/promise",
-            "version": "v2.7.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/reactphp/promise.git",
-                "reference": "f4edc2581617431aea50430749db55cc3fc031b3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/promise/zipball/f4edc2581617431aea50430749db55cc3fc031b3",
-                "reference": "f4edc2581617431aea50430749db55cc3fc031b3",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.8"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "React\\Promise\\": "src/"
-                },
-                "files": [
-                    "src/functions_include.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jan Sorgalla",
-                    "email": "jsorgalla@gmail.com"
-                }
-            ],
-            "description": "A lightweight implementation of CommonJS Promises/A for PHP",
-            "keywords": [
-                "promise",
-                "promises"
-            ],
-            "time": "2018-06-13T15:59:06+00:00"
-        },
-        {
             "name": "react/promise-timer",
             "version": "v1.5.0",
             "source": {
@@ -2970,16 +3237,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v3.4.11",
+            "version": "v3.4.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "36f83f642443c46f3cf751d4d2ee5d047d757a27"
+                "reference": "1b97071a26d028c9bd4588264e101e14f6e7cd00"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/36f83f642443c46f3cf751d4d2ee5d047d757a27",
-                "reference": "36f83f642443c46f3cf751d4d2ee5d047d757a27",
+                "url": "https://api.github.com/repos/symfony/console/zipball/1b97071a26d028c9bd4588264e101e14f6e7cd00",
+                "reference": "1b97071a26d028c9bd4588264e101e14f6e7cd00",
                 "shasum": ""
             },
             "require": {
@@ -3035,20 +3302,20 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2018-05-16T08:49:21+00:00"
+            "time": "2018-05-23T05:02:55+00:00"
         },
         {
             "name": "symfony/debug",
-            "version": "v4.1.0",
+            "version": "v4.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "449f8b00b28ab6e6912c3e6b920406143b27193b"
+                "reference": "dbe0fad88046a755dcf9379f2964c61a02f5ae3d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/449f8b00b28ab6e6912c3e6b920406143b27193b",
-                "reference": "449f8b00b28ab6e6912c3e6b920406143b27193b",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/dbe0fad88046a755dcf9379f2964c61a02f5ae3d",
+                "reference": "dbe0fad88046a755dcf9379f2964c61a02f5ae3d",
                 "shasum": ""
             },
             "require": {
@@ -3091,11 +3358,11 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2018-05-16T14:33:22+00:00"
+            "time": "2018-06-08T09:39:36+00:00"
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v4.1.0",
+            "version": "v4.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
@@ -3158,7 +3425,7 @@
         },
         {
             "name": "symfony/filesystem",
-            "version": "v4.1.0",
+            "version": "v4.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
@@ -3208,16 +3475,16 @@
         },
         {
             "name": "symfony/finder",
-            "version": "v3.4.11",
+            "version": "v3.4.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
-                "reference": "472a92f3df8b247b49ae364275fb32943b9656c6"
+                "reference": "3a8c3de91d2b2c68cd2d665cf9d00f7ef9eaa394"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/finder/zipball/472a92f3df8b247b49ae364275fb32943b9656c6",
-                "reference": "472a92f3df8b247b49ae364275fb32943b9656c6",
+                "url": "https://api.github.com/repos/symfony/finder/zipball/3a8c3de91d2b2c68cd2d665cf9d00f7ef9eaa394",
+                "reference": "3a8c3de91d2b2c68cd2d665cf9d00f7ef9eaa394",
                 "shasum": ""
             },
             "require": {
@@ -3253,20 +3520,20 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
-            "time": "2018-05-16T08:49:21+00:00"
+            "time": "2018-06-19T20:52:10+00:00"
         },
         {
             "name": "symfony/options-resolver",
-            "version": "v4.1.0",
+            "version": "v4.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/options-resolver.git",
-                "reference": "9b9ab6043c57c8c5571bc846e6ebfd27dff3b589"
+                "reference": "45cdcc8a96ef92b43a50723e6d1f5f83096e8cef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/options-resolver/zipball/9b9ab6043c57c8c5571bc846e6ebfd27dff3b589",
-                "reference": "9b9ab6043c57c8c5571bc846e6ebfd27dff3b589",
+                "url": "https://api.github.com/repos/symfony/options-resolver/zipball/45cdcc8a96ef92b43a50723e6d1f5f83096e8cef",
+                "reference": "45cdcc8a96ef92b43a50723e6d1f5f83096e8cef",
                 "shasum": ""
             },
             "require": {
@@ -3307,7 +3574,7 @@
                 "configuration",
                 "options"
             ],
-            "time": "2018-05-30T07:26:09+00:00"
+            "time": "2018-05-31T10:17:53+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -3539,16 +3806,16 @@
         },
         {
             "name": "symfony/process",
-            "version": "v3.4.11",
+            "version": "v3.4.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "4cbf2db9abcb01486a21b7a059e03a62fae63187"
+                "reference": "acc5a37c706ace827962851b69705b24e71ca17c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/4cbf2db9abcb01486a21b7a059e03a62fae63187",
-                "reference": "4cbf2db9abcb01486a21b7a059e03a62fae63187",
+                "url": "https://api.github.com/repos/symfony/process/zipball/acc5a37c706ace827962851b69705b24e71ca17c",
+                "reference": "acc5a37c706ace827962851b69705b24e71ca17c",
                 "shasum": ""
             },
             "require": {
@@ -3584,11 +3851,11 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2018-05-16T08:49:21+00:00"
+            "time": "2018-05-30T04:24:30+00:00"
         },
         {
             "name": "symfony/stopwatch",
-            "version": "v4.1.0",
+            "version": "v4.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/stopwatch.git",
@@ -3637,7 +3904,7 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v3.4.11",
+            "version": "v3.4.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
