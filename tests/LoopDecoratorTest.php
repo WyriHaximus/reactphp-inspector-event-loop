@@ -43,78 +43,78 @@ class LoopDecoratorTest extends TestCase
     public function testReset()
     {
         $counters = GlobalState::get();
-        $this->assertSame(0, $counters['ticks.future.total']);
+        $this->assertSame(0, $counters['eventloop.ticks.future.total']);
 
         $this->loop->futureTick(function () {
         });
 
         $counters = GlobalState::get();
-        $this->assertSame(1, $counters['ticks.future.total']);
+        $this->assertSame(1, $counters['eventloop.ticks.future.total']);
 
         $this->loop->run();
 
         $counters = GlobalState::get();
-        $this->assertSame(1, $counters['ticks.future.ticks']);
+        $this->assertSame(1, $counters['eventloop.ticks.future.ticks']);
 
         GlobalState::reset();
 
         $counters = GlobalState::get();
-        $this->assertSame(0, $counters['ticks.future.total']);
-        $this->assertSame(0, $counters['ticks.future.ticks']);
+        $this->assertSame(0, $counters['eventloop.ticks.future.total']);
+        $this->assertSame(0, $counters['eventloop.ticks.future.ticks']);
     }
 
     public function testFutureTick()
     {
         $counters = GlobalState::get();
-        $this->assertSame(0, $counters['ticks.future.current']);
-        $this->assertSame(0, $counters['ticks.future.total']);
-        $this->assertSame(0, $counters['ticks.future.ticks']);
+        $this->assertSame(0, $counters['eventloop.ticks.future.current']);
+        $this->assertSame(0, $counters['eventloop.ticks.future.total']);
+        $this->assertSame(0, $counters['eventloop.ticks.future.ticks']);
 
         $this->loop->futureTick(function () {
         });
 
         $counters = GlobalState::get();
-        $this->assertSame(1, $counters['ticks.future.current']);
-        $this->assertSame(1, $counters['ticks.future.total']);
-        $this->assertSame(0, $counters['ticks.future.ticks']);
+        $this->assertSame(1, $counters['eventloop.ticks.future.current']);
+        $this->assertSame(1, $counters['eventloop.ticks.future.total']);
+        $this->assertSame(0, $counters['eventloop.ticks.future.ticks']);
 
         $this->loop->run();
 
         $counters = GlobalState::get();
-        $this->assertSame(0, $counters['ticks.future.current']);
-        $this->assertSame(1, $counters['ticks.future.total']);
-        $this->assertSame(1, $counters['ticks.future.ticks']);
+        $this->assertSame(0, $counters['eventloop.ticks.future.current']);
+        $this->assertSame(1, $counters['eventloop.ticks.future.total']);
+        $this->assertSame(1, $counters['eventloop.ticks.future.ticks']);
     }
 
     public function testTimer()
     {
         $counters = GlobalState::get();
-        $this->assertSame(0, $counters['timers.once.current']);
-        $this->assertSame(0, $counters['timers.once.total']);
-        $this->assertSame(0, $counters['timers.once.ticks']);
+        $this->assertSame(0, $counters['eventloop.timers.once.current']);
+        $this->assertSame(0, $counters['eventloop.timers.once.total']);
+        $this->assertSame(0, $counters['eventloop.timers.once.ticks']);
 
         $this->loop->addTimer(0.0001, function () {
         });
 
         $counters = GlobalState::get();
-        $this->assertSame(1, $counters['timers.once.current']);
-        $this->assertSame(1, $counters['timers.once.total']);
-        $this->assertSame(0, $counters['timers.once.ticks']);
+        $this->assertSame(1, $counters['eventloop.timers.once.current']);
+        $this->assertSame(1, $counters['eventloop.timers.once.total']);
+        $this->assertSame(0, $counters['eventloop.timers.once.ticks']);
 
         $this->loop->run();
 
         $counters = GlobalState::get();
-        $this->assertSame(0, $counters['timers.once.current']);
-        $this->assertSame(1, $counters['timers.once.total']);
-        $this->assertSame(1, $counters['timers.once.ticks']);
+        $this->assertSame(0, $counters['eventloop.timers.once.current']);
+        $this->assertSame(1, $counters['eventloop.timers.once.total']);
+        $this->assertSame(1, $counters['eventloop.timers.once.ticks']);
     }
 
     public function testTimerCanceledBeforeCalled()
     {
         $counters = GlobalState::get();
-        $this->assertSame(0, $counters['timers.once.current']);
-        $this->assertSame(0, $counters['timers.once.total']);
-        $this->assertSame(0, $counters['timers.once.ticks']);
+        $this->assertSame(0, $counters['eventloop.timers.once.current']);
+        $this->assertSame(0, $counters['eventloop.timers.once.total']);
+        $this->assertSame(0, $counters['eventloop.timers.once.ticks']);
 
         $timer = $this->loop->addTimer(1, function () {
         });
@@ -125,24 +125,24 @@ class LoopDecoratorTest extends TestCase
         });
 
         $counters = GlobalState::get();
-        $this->assertSame(1, $counters['timers.once.current']);
-        $this->assertSame(1, $counters['timers.once.total']);
-        $this->assertSame(0, $counters['timers.once.ticks']);
+        $this->assertSame(1, $counters['eventloop.timers.once.current']);
+        $this->assertSame(1, $counters['eventloop.timers.once.total']);
+        $this->assertSame(0, $counters['eventloop.timers.once.ticks']);
 
         $this->loop->run();
 
         $counters = GlobalState::get();
-        $this->assertSame(0, $counters['timers.once.current']);
-        $this->assertSame(1, $counters['timers.once.total']);
-        $this->assertSame(0, $counters['timers.once.ticks']);
+        $this->assertSame(0, $counters['eventloop.timers.once.current']);
+        $this->assertSame(1, $counters['eventloop.timers.once.total']);
+        $this->assertSame(0, $counters['eventloop.timers.once.ticks']);
     }
 
     public function testPeriodicTimer()
     {
         $counters = GlobalState::get();
-        $this->assertSame(0, $counters['timers.periodic.current']);
-        $this->assertSame(0, $counters['timers.periodic.total']);
-        $this->assertSame(0, $counters['timers.periodic.ticks']);
+        $this->assertSame(0, $counters['eventloop.timers.periodic.current']);
+        $this->assertSame(0, $counters['eventloop.timers.periodic.total']);
+        $this->assertSame(0, $counters['eventloop.timers.periodic.ticks']);
 
         $i = 1;
         $this->loop->addPeriodicTimer(0.0001, function (TimerInterface $timer) use (&$i) {
@@ -153,27 +153,27 @@ class LoopDecoratorTest extends TestCase
         });
 
         $counters = GlobalState::get();
-        $this->assertSame(1, $counters['timers.periodic.current']);
-        $this->assertSame(1, $counters['timers.periodic.total']);
-        $this->assertSame(0, $counters['timers.periodic.ticks']);
+        $this->assertSame(1, $counters['eventloop.timers.periodic.current']);
+        $this->assertSame(1, $counters['eventloop.timers.periodic.total']);
+        $this->assertSame(0, $counters['eventloop.timers.periodic.ticks']);
 
         $this->loop->run();
 
         $counters = GlobalState::get();
-        $this->assertSame(0, $counters['timers.periodic.current']);
-        $this->assertSame(1, $counters['timers.periodic.total']);
-        $this->assertSame(3, $counters['timers.periodic.ticks']);
+        $this->assertSame(0, $counters['eventloop.timers.periodic.current']);
+        $this->assertSame(1, $counters['eventloop.timers.periodic.total']);
+        $this->assertSame(3, $counters['eventloop.timers.periodic.ticks']);
     }
 
     public function testAddReadStream()
     {
         $counters = GlobalState::get();
-        $this->assertSame(0, $counters['streams.read.current']);
-        $this->assertSame(0, $counters['streams.write.current']);
-        $this->assertSame(0, $counters['streams.total.current']);
-        $this->assertSame(0, $counters['streams.read.total']);
-        $this->assertSame(0, $counters['streams.write.total']);
-        $this->assertSame(0, $counters['streams.total.total']);
+        $this->assertSame(0, $counters['eventloop.streams.read.current']);
+        $this->assertSame(0, $counters['eventloop.streams.write.current']);
+        $this->assertSame(0, $counters['eventloop.streams.total.current']);
+        $this->assertSame(0, $counters['eventloop.streams.read.total']);
+        $this->assertSame(0, $counters['eventloop.streams.write.total']);
+        $this->assertSame(0, $counters['eventloop.streams.total.total']);
 
         $stream = $this->createStream(self::STREAM_READ);
 
@@ -181,33 +181,33 @@ class LoopDecoratorTest extends TestCase
         });
 
         $counters = GlobalState::get();
-        $this->assertSame(1, $counters['streams.read.current']);
-        $this->assertSame(0, $counters['streams.write.current']);
-        $this->assertSame(1, $counters['streams.total.current']);
-        $this->assertSame(1, $counters['streams.read.total']);
-        $this->assertSame(0, $counters['streams.write.total']);
-        $this->assertSame(1, $counters['streams.total.total']);
+        $this->assertSame(1, $counters['eventloop.streams.read.current']);
+        $this->assertSame(0, $counters['eventloop.streams.write.current']);
+        $this->assertSame(1, $counters['eventloop.streams.total.current']);
+        $this->assertSame(1, $counters['eventloop.streams.read.total']);
+        $this->assertSame(0, $counters['eventloop.streams.write.total']);
+        $this->assertSame(1, $counters['eventloop.streams.total.total']);
 
         $this->loop->removeReadStream($stream);
 
         $counters = GlobalState::get();
-        $this->assertSame(0, $counters['streams.read.current']);
-        $this->assertSame(0, $counters['streams.write.current']);
-        $this->assertSame(0, $counters['streams.total.current']);
-        $this->assertSame(1, $counters['streams.read.total']);
-        $this->assertSame(0, $counters['streams.write.total']);
-        $this->assertSame(1, $counters['streams.total.total']);
+        $this->assertSame(0, $counters['eventloop.streams.read.current']);
+        $this->assertSame(0, $counters['eventloop.streams.write.current']);
+        $this->assertSame(0, $counters['eventloop.streams.total.current']);
+        $this->assertSame(1, $counters['eventloop.streams.read.total']);
+        $this->assertSame(0, $counters['eventloop.streams.write.total']);
+        $this->assertSame(1, $counters['eventloop.streams.total.total']);
     }
 
     public function testAddWriteStream()
     {
         $counters = GlobalState::get();
-        $this->assertSame(0, $counters['streams.read.current']);
-        $this->assertSame(0, $counters['streams.write.current']);
-        $this->assertSame(0, $counters['streams.total.current']);
-        $this->assertSame(0, $counters['streams.read.total']);
-        $this->assertSame(0, $counters['streams.write.total']);
-        $this->assertSame(0, $counters['streams.total.total']);
+        $this->assertSame(0, $counters['eventloop.streams.read.current']);
+        $this->assertSame(0, $counters['eventloop.streams.write.current']);
+        $this->assertSame(0, $counters['eventloop.streams.total.current']);
+        $this->assertSame(0, $counters['eventloop.streams.read.total']);
+        $this->assertSame(0, $counters['eventloop.streams.write.total']);
+        $this->assertSame(0, $counters['eventloop.streams.total.total']);
 
         $stream = $this->createStream(self::STREAM_WRITE);
 
@@ -215,33 +215,33 @@ class LoopDecoratorTest extends TestCase
         });
 
         $counters = GlobalState::get();
-        $this->assertSame(0, $counters['streams.read.current']);
-        $this->assertSame(1, $counters['streams.write.current']);
-        $this->assertSame(1, $counters['streams.total.current']);
-        $this->assertSame(0, $counters['streams.read.total']);
-        $this->assertSame(1, $counters['streams.write.total']);
-        $this->assertSame(1, $counters['streams.total.total']);
+        $this->assertSame(0, $counters['eventloop.streams.read.current']);
+        $this->assertSame(1, $counters['eventloop.streams.write.current']);
+        $this->assertSame(1, $counters['eventloop.streams.total.current']);
+        $this->assertSame(0, $counters['eventloop.streams.read.total']);
+        $this->assertSame(1, $counters['eventloop.streams.write.total']);
+        $this->assertSame(1, $counters['eventloop.streams.total.total']);
 
         $this->loop->removeWriteStream($stream);
 
         $counters = GlobalState::get();
-        $this->assertSame(0, $counters['streams.read.current']);
-        $this->assertSame(0, $counters['streams.write.current']);
-        $this->assertSame(0, $counters['streams.total.current']);
-        $this->assertSame(0, $counters['streams.read.total']);
-        $this->assertSame(1, $counters['streams.write.total']);
-        $this->assertSame(1, $counters['streams.total.total']);
+        $this->assertSame(0, $counters['eventloop.streams.read.current']);
+        $this->assertSame(0, $counters['eventloop.streams.write.current']);
+        $this->assertSame(0, $counters['eventloop.streams.total.current']);
+        $this->assertSame(0, $counters['eventloop.streams.read.total']);
+        $this->assertSame(1, $counters['eventloop.streams.write.total']);
+        $this->assertSame(1, $counters['eventloop.streams.total.total']);
     }
 
     public function testComplexReadWriteDuplexStreams()
     {
         $counters = GlobalState::get();
-        $this->assertSame(0, $counters['streams.read.current']);
-        $this->assertSame(0, $counters['streams.write.current']);
-        $this->assertSame(0, $counters['streams.total.current']);
-        $this->assertSame(0, $counters['streams.read.total']);
-        $this->assertSame(0, $counters['streams.write.total']);
-        $this->assertSame(0, $counters['streams.total.total']);
+        $this->assertSame(0, $counters['eventloop.streams.read.current']);
+        $this->assertSame(0, $counters['eventloop.streams.write.current']);
+        $this->assertSame(0, $counters['eventloop.streams.total.current']);
+        $this->assertSame(0, $counters['eventloop.streams.read.total']);
+        $this->assertSame(0, $counters['eventloop.streams.write.total']);
+        $this->assertSame(0, $counters['eventloop.streams.total.total']);
 
         $streamRead   = $this->createStream(self::STREAM_READ);
         $streamWrite  = $this->createStream(self::STREAM_WRITE);
@@ -253,12 +253,12 @@ class LoopDecoratorTest extends TestCase
         });
 
         $counters = GlobalState::get();
-        $this->assertSame(1, $counters['streams.read.current']);
-        $this->assertSame(1, $counters['streams.write.current']);
-        $this->assertSame(2, $counters['streams.total.current']);
-        $this->assertSame(1, $counters['streams.read.total']);
-        $this->assertSame(1, $counters['streams.write.total']);
-        $this->assertSame(2, $counters['streams.total.total']);
+        $this->assertSame(1, $counters['eventloop.streams.read.current']);
+        $this->assertSame(1, $counters['eventloop.streams.write.current']);
+        $this->assertSame(2, $counters['eventloop.streams.total.current']);
+        $this->assertSame(1, $counters['eventloop.streams.read.total']);
+        $this->assertSame(1, $counters['eventloop.streams.write.total']);
+        $this->assertSame(2, $counters['eventloop.streams.total.total']);
 
         $this->loop->addReadStream($streamDuplex, function () {
         });
@@ -266,12 +266,12 @@ class LoopDecoratorTest extends TestCase
         });
 
         $counters = GlobalState::get();
-        $this->assertSame(2, $counters['streams.read.current']);
-        $this->assertSame(2, $counters['streams.write.current']);
-        $this->assertSame(3, $counters['streams.total.current']);
-        $this->assertSame(2, $counters['streams.read.total']);
-        $this->assertSame(2, $counters['streams.write.total']);
-        $this->assertSame(3, $counters['streams.total.total']);
+        $this->assertSame(2, $counters['eventloop.streams.read.current']);
+        $this->assertSame(2, $counters['eventloop.streams.write.current']);
+        $this->assertSame(3, $counters['eventloop.streams.total.current']);
+        $this->assertSame(2, $counters['eventloop.streams.read.total']);
+        $this->assertSame(2, $counters['eventloop.streams.write.total']);
+        $this->assertSame(3, $counters['eventloop.streams.total.total']);
 
         $this->loop->removeReadStream($streamRead, function () {
         });
@@ -279,62 +279,62 @@ class LoopDecoratorTest extends TestCase
         });
 
         $counters = GlobalState::get();
-        $this->assertSame(1, $counters['streams.read.current']);
-        $this->assertSame(1, $counters['streams.write.current']);
-        $this->assertSame(1, $counters['streams.total.current']);
-        $this->assertSame(2, $counters['streams.read.total']);
-        $this->assertSame(2, $counters['streams.write.total']);
-        $this->assertSame(3, $counters['streams.total.total']);
+        $this->assertSame(1, $counters['eventloop.streams.read.current']);
+        $this->assertSame(1, $counters['eventloop.streams.write.current']);
+        $this->assertSame(1, $counters['eventloop.streams.total.current']);
+        $this->assertSame(2, $counters['eventloop.streams.read.total']);
+        $this->assertSame(2, $counters['eventloop.streams.write.total']);
+        $this->assertSame(3, $counters['eventloop.streams.total.total']);
 
         $this->loop->removeReadStream($streamDuplex, function () {
         });
 
         $counters = GlobalState::get();
-        $this->assertSame(0, $counters['streams.read.current']);
-        $this->assertSame(1, $counters['streams.write.current']);
-        $this->assertSame(1, $counters['streams.total.current']);
-        $this->assertSame(2, $counters['streams.read.total']);
-        $this->assertSame(2, $counters['streams.write.total']);
-        $this->assertSame(3, $counters['streams.total.total']);
+        $this->assertSame(0, $counters['eventloop.streams.read.current']);
+        $this->assertSame(1, $counters['eventloop.streams.write.current']);
+        $this->assertSame(1, $counters['eventloop.streams.total.current']);
+        $this->assertSame(2, $counters['eventloop.streams.read.total']);
+        $this->assertSame(2, $counters['eventloop.streams.write.total']);
+        $this->assertSame(3, $counters['eventloop.streams.total.total']);
 
         $this->loop->removeWriteStream($streamDuplex, function () {
         });
 
         $counters = GlobalState::get();
-        $this->assertSame(0, $counters['streams.read.current']);
-        $this->assertSame(0, $counters['streams.write.current']);
-        $this->assertSame(0, $counters['streams.total.current']);
-        $this->assertSame(2, $counters['streams.read.total']);
-        $this->assertSame(2, $counters['streams.write.total']);
-        $this->assertSame(3, $counters['streams.total.total']);
+        $this->assertSame(0, $counters['eventloop.streams.read.current']);
+        $this->assertSame(0, $counters['eventloop.streams.write.current']);
+        $this->assertSame(0, $counters['eventloop.streams.total.current']);
+        $this->assertSame(2, $counters['eventloop.streams.read.total']);
+        $this->assertSame(2, $counters['eventloop.streams.write.total']);
+        $this->assertSame(3, $counters['eventloop.streams.total.total']);
 
         $signalFunc = function () {
         };
         $this->loop->addSignal(SIGUSR1, $signalFunc);
 
         $counters = GlobalState::get();
-        $this->assertSame(0, $counters['streams.read.current']);
-        $this->assertSame(0, $counters['streams.write.current']);
-        $this->assertSame(0, $counters['streams.total.current']);
-        $this->assertSame(2, $counters['streams.read.total']);
-        $this->assertSame(2, $counters['streams.write.total']);
-        $this->assertSame(3, $counters['streams.total.total']);
-        $this->assertSame(1, $counters['signals.current']);
-        $this->assertSame(1, $counters['signals.total']);
-        $this->assertSame(0, $counters['signals.ticks']);
+        $this->assertSame(0, $counters['eventloop.streams.read.current']);
+        $this->assertSame(0, $counters['eventloop.streams.write.current']);
+        $this->assertSame(0, $counters['eventloop.streams.total.current']);
+        $this->assertSame(2, $counters['eventloop.streams.read.total']);
+        $this->assertSame(2, $counters['eventloop.streams.write.total']);
+        $this->assertSame(3, $counters['eventloop.streams.total.total']);
+        $this->assertSame(1, $counters['eventloop.signals.current']);
+        $this->assertSame(1, $counters['eventloop.signals.total']);
+        $this->assertSame(0, $counters['eventloop.signals.ticks']);
 
         $this->loop->removeSignal(SIGUSR1, $signalFunc);
 
         $counters = GlobalState::get();
-        $this->assertSame(0, $counters['streams.read.current']);
-        $this->assertSame(0, $counters['streams.write.current']);
-        $this->assertSame(0, $counters['streams.total.current']);
-        $this->assertSame(2, $counters['streams.read.total']);
-        $this->assertSame(2, $counters['streams.write.total']);
-        $this->assertSame(3, $counters['streams.total.total']);
-        $this->assertSame(0, $counters['signals.current']);
-        $this->assertSame(1, $counters['signals.total']);
-        $this->assertSame(0, $counters['signals.ticks']);
+        $this->assertSame(0, $counters['eventloop.streams.read.current']);
+        $this->assertSame(0, $counters['eventloop.streams.write.current']);
+        $this->assertSame(0, $counters['eventloop.streams.total.current']);
+        $this->assertSame(2, $counters['eventloop.streams.read.total']);
+        $this->assertSame(2, $counters['eventloop.streams.write.total']);
+        $this->assertSame(3, $counters['eventloop.streams.total.total']);
+        $this->assertSame(0, $counters['eventloop.signals.current']);
+        $this->assertSame(1, $counters['eventloop.signals.total']);
+        $this->assertSame(0, $counters['eventloop.signals.ticks']);
     }
 
     protected function createStream($mode)

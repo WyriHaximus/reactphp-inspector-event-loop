@@ -64,16 +64,16 @@ final class LoopDecorator implements LoopInterface
         $this->streamsRead[$key] = $stream;
         $this->streamsDuplex[$key] = $stream;
 
-        GlobalState::set('streams.read.current', count($this->streamsRead));
-        GlobalState::set('streams.total.current', count($this->streamsDuplex));
-        GlobalState::incr('streams.read.total');
+        GlobalState::set('eventloop.streams.read.current', count($this->streamsRead));
+        GlobalState::set('eventloop.streams.total.current', count($this->streamsDuplex));
+        GlobalState::incr('eventloop.streams.read.total');
         if (!isset($this->streamsWrite[$key])) {
-            GlobalState::incr('streams.total.total');
+            GlobalState::incr('eventloop.streams.total.total');
         }
 
         $this->loop->addReadStream($stream, function ($stream) use ($listener) {
-            GlobalState::incr('streams.read.ticks');
-            GlobalState::incr('streams.total.ticks');
+            GlobalState::incr('eventloop.streams.read.ticks');
+            GlobalState::incr('eventloop.streams.total.ticks');
 
             $listener($stream, $this);
         });
@@ -92,17 +92,17 @@ final class LoopDecorator implements LoopInterface
         $this->streamsWrite[$key] = $stream;
         $this->streamsDuplex[$key] = $stream;
 
-        GlobalState::set('streams.write.current', count($this->streamsWrite));
-        GlobalState::set('streams.total.current', count($this->streamsDuplex));
-        GlobalState::incr('streams.write.total');
+        GlobalState::set('eventloop.streams.write.current', count($this->streamsWrite));
+        GlobalState::set('eventloop.streams.total.current', count($this->streamsDuplex));
+        GlobalState::incr('eventloop.streams.write.total');
 
         if (!isset($this->streamsRead[$key])) {
-            GlobalState::incr('streams.total.total');
+            GlobalState::incr('eventloop.streams.total.total');
         }
 
         $this->loop->addWriteStream($stream, function ($stream) use ($listener) {
-            GlobalState::incr('streams.write.ticks');
-            GlobalState::incr('streams.total.ticks');
+            GlobalState::incr('eventloop.streams.write.ticks');
+            GlobalState::incr('eventloop.streams.total.ticks');
 
             $listener($stream, $this);
         });
@@ -124,8 +124,8 @@ final class LoopDecorator implements LoopInterface
             unset($this->streamsDuplex[$key]);
         }
 
-        GlobalState::set('streams.read.current', count($this->streamsRead));
-        GlobalState::set('streams.total.current', count($this->streamsDuplex));
+        GlobalState::set('eventloop.streams.read.current', count($this->streamsRead));
+        GlobalState::set('eventloop.streams.total.current', count($this->streamsDuplex));
 
         $this->loop->removeReadStream($stream);
     }
@@ -146,8 +146,8 @@ final class LoopDecorator implements LoopInterface
             unset($this->streamsDuplex[$key]);
         }
 
-        GlobalState::set('streams.write.current', count($this->streamsWrite));
-        GlobalState::set('streams.total.current', count($this->streamsDuplex));
+        GlobalState::set('eventloop.streams.write.current', count($this->streamsWrite));
+        GlobalState::set('eventloop.streams.total.current', count($this->streamsDuplex));
 
         $this->loop->removeWriteStream($stream);
     }
@@ -291,12 +291,12 @@ final class LoopDecorator implements LoopInterface
      */
     public function futureTick($listener)
     {
-        GlobalState::incr('ticks.future.current');
-        GlobalState::incr('ticks.future.total');
+        GlobalState::incr('eventloop.ticks.future.current');
+        GlobalState::incr('eventloop.ticks.future.total');
 
         return $this->loop->futureTick(function () use ($listener) {
-            GlobalState::decr('ticks.future.current');
-            GlobalState::incr('ticks.future.ticks');
+            GlobalState::decr('eventloop.ticks.future.current');
+            GlobalState::incr('eventloop.ticks.future.ticks');
             $listener($this);
         });
     }
