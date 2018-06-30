@@ -4,8 +4,52 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "5192fda599f74f218ed0b22604df0298",
+    "content-hash": "9620d8c3b006a8ea876a9e382895144f",
     "packages": [
+        {
+            "name": "api-clients/rx",
+            "version": "2.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-api-clients/rx.git",
+                "reference": "c38d42768ebdb6e396066bc03055c3c9117bc6e9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-api-clients/rx/zipball/c38d42768ebdb6e396066bc03055c3c9117bc6e9",
+                "reference": "c38d42768ebdb6e396066bc03055c3c9117bc6e9",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.0",
+                "react/promise": "^2.4",
+                "reactivex/rxphp": "^2.0"
+            },
+            "require-dev": {
+                "api-clients/test-utilities": "^3.0.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "ApiClients\\Tools\\Rx\\": "src/"
+                },
+                "files": [
+                    "src/functions_include.php",
+                    "src/bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Cees-Jan Kiewiet",
+                    "email": "ceesjank@gmail.com"
+                }
+            ],
+            "time": "2017-10-04T20:00:12+00:00"
+        },
         {
             "name": "evenement/evenement",
             "version": "v3.0.1",
@@ -343,15 +387,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/WyriHaximus/reactphp-inspector.git",
-                "reference": "33600a9d8aa2a2d217300ad8ca3fe881da9e52d7"
+                "reference": "5cb426c9f140a5d39103ca5f738dcea5ae31d650"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WyriHaximus/reactphp-inspector/zipball/33600a9d8aa2a2d217300ad8ca3fe881da9e52d7",
-                "reference": "33600a9d8aa2a2d217300ad8ca3fe881da9e52d7",
+                "url": "https://api.github.com/repos/WyriHaximus/reactphp-inspector/zipball/5cb426c9f140a5d39103ca5f738dcea5ae31d650",
+                "reference": "5cb426c9f140a5d39103ca5f738dcea5ae31d650",
                 "shasum": ""
             },
             "require": {
+                "api-clients/rx": "^2.2",
                 "php": "^7.2",
                 "reactivex/rxphp": "^2.0",
                 "wyrihaximus/get-in-packages-composer.jason": "^1.0",
@@ -364,11 +409,15 @@
                 "wyrihaximus/react-inspector-bunny": "Measure what is going through fread/fwrite calls from bunny/bunny",
                 "wyrihaximus/react-inspector-cpu-usage": "Measure the CPU usage of your application and it's child processes",
                 "wyrihaximus/react-inspector-event-loop": "Measure what is going through the event loop",
+                "wyrihaximus/react-inspector-memory-usage": "Message the memory usage of the current PHP process",
                 "wyrihaximus/react-inspector-stream": "Measure what is going through fread/fwrite calls from react/stream"
             },
             "type": "library",
             "extra": {
                 "react-inspector": {
+                    "collectors": {
+                        "WyriHaximus\\React\\Inspector\\Collector": "src/Collector"
+                    },
                     "metrics": [
                         "inspector.metrics"
                     ],
@@ -399,7 +448,7 @@
                 }
             ],
             "description": "Inspect react/* packages for metrics and other insights                               ",
-            "time": "2018-06-23T18:43:55+00:00"
+            "time": "2018-06-29T21:32:24+00:00"
         },
         {
             "name": "wyrihaximus/ticking-promise",
