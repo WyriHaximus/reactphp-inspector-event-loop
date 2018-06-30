@@ -164,13 +164,13 @@ final class LoopDecorator implements LoopInterface
         }
 
         $this->signals[$signal][$hash] = function (...$args) use ($signal, $listener, $hash) {
-            GlobalState::incr('signals.ticks');
+            GlobalState::incr('eventloop.signals.ticks');
 
             $listener(...$args);
         };
 
-        GlobalState::set('signals.current', count($this->signals));
-        GlobalState::incr('signals.total');
+        GlobalState::set('eventloop.signals.current', count($this->signals));
+        GlobalState::incr('eventloop.signals.total');
 
         $this->loop->addSignal($signal, $this->signals[$signal][$hash]);
     }
@@ -189,7 +189,7 @@ final class LoopDecorator implements LoopInterface
             unset($this->signals[$signal]);
         }
 
-        GlobalState::set('signals.current', count($this->signals));
+        GlobalState::set('eventloop.signals.current', count($this->signals));
     }
 
     /**
@@ -207,8 +207,8 @@ final class LoopDecorator implements LoopInterface
     {
         $loopTimer = null;
         $wrapper = function () use (&$loopTimer, $callback, $interval) {
-            GlobalState::decr('timers.once.current');
-            GlobalState::incr('timers.once.ticks');
+            GlobalState::decr('eventloop.timers.once.current');
+            GlobalState::incr('eventloop.timers.once.ticks');
 
             $callback($loopTimer);
 
@@ -221,8 +221,8 @@ final class LoopDecorator implements LoopInterface
 
         $this->timers[spl_object_hash($loopTimer)] = true;
 
-        GlobalState::incr('timers.once.current');
-        GlobalState::incr('timers.once.total');
+        GlobalState::incr('eventloop.timers.once.current');
+        GlobalState::incr('eventloop.timers.once.total');
 
         return $loopTimer;
     }
@@ -243,7 +243,7 @@ final class LoopDecorator implements LoopInterface
         $loopTimer = $this->loop->addPeriodicTimer(
             $interval,
             function () use (&$loopTimer, $callback, $interval) {
-                GlobalState::incr('timers.periodic.ticks');
+                GlobalState::incr('eventloop.timers.periodic.ticks');
 
                 $callback($loopTimer);
             }
@@ -251,8 +251,8 @@ final class LoopDecorator implements LoopInterface
 
         $this->timers[spl_object_hash($loopTimer)] = true;
 
-        GlobalState::incr('timers.periodic.current');
-        GlobalState::incr('timers.periodic.total');
+        GlobalState::incr('eventloop.timers.periodic.current');
+        GlobalState::incr('eventloop.timers.periodic.total');
 
         return $loopTimer;
     }
@@ -274,12 +274,12 @@ final class LoopDecorator implements LoopInterface
         unset($this->timers[$hash]);
 
         if ($isPeriodic) {
-            GlobalState::decr('timers.periodic.current');
+            GlobalState::decr('eventloop.timers.periodic.current');
 
             return;
         }
 
-        GlobalState::decr('timers.once.current');
+        GlobalState::decr('eventloop.timers.once.current');
     }
 
     /**
